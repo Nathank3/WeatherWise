@@ -10,7 +10,7 @@ WeatherWise is a smart weather decision dashboard built with the WeatherAI API. 
 - Practical decision cards for travel readiness, outdoor activity, farming/gardening, and weather risk level.
 - Preset global locations plus custom latitude and longitude entry.
 - Optional AI summaries toggle using `ai=false` to preserve quota.
-- WeatherAI usage/quota card with graceful fallback if usage data is unavailable.
+- WeatherAI usage/quota card showing plan, reset date, request usage, remaining quota, limits, and AI quota when available.
 - Server-side API routes so the WeatherAI API key is never exposed in browser code.
 
 ## Tech Stack
@@ -61,7 +61,7 @@ WeatherAI requests are made only from server-side routes under `/api/weather` an
 
 ## Notes On API Shape
 
-WeatherWise includes a normalization helper because third-party weather APIs can vary field names across responses. The helper checks common names for current weather, forecast days, locations, AI summaries, and usage values. If fields are missing, the UI shows friendly fallback text instead of crashing.
+WeatherWise includes a normalization helper because third-party weather APIs can vary field names across responses. The helper checks common names for current weather, forecast days, locations, AI summaries, and usage values, including nested usage fields such as period counts, limits, and remaining quota. If fields are missing, the UI shows friendly fallback text instead of crashing.
 
 ## Future Improvements
 
