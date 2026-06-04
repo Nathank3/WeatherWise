@@ -31,6 +31,16 @@ The app uses only all-plan WeatherAI endpoints. Forecast requests are capped at 
 
 ## Environment Variables
 
+### Getting A WeatherAI API Key
+
+1. Go to [https://weather-ai.co/](https://weather-ai.co/).
+2. Create an account or sign in.
+3. Open the developer/API dashboard.
+4. Generate a new API key.
+5. Copy the key and use it as `WEATHER_AI_API_KEY` in your local `.env` file or Vercel environment variables.
+
+Keep this key private. Do not paste the real key into frontend code, screenshots, public issues, or committed files.
+
 Create a local `.env` file:
 
 ```bash
