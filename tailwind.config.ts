@@ -9,15 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#111827",
-        cloud: "#f7f8fb",
-        mist: "#e8edf3",
-        signal: "#0f766e",
-        amberline: "#b45309",
-        berry: "#9f1239",
+        ink: "#102033",
+        cloud: "#f6f9fc",
+        mist: "#dfe8f0",
+        signal: "#0f9f8f",
+        skywise: "#1d9bf0",
+        sunbeam: "#f7b731",
+        amberline: "#d97706",
+        berry: "#be123c",
+        violetline: "#6d5dfc",
       },
       boxShadow: {
-        panel: "0 18px 45px rgba(17, 24, 39, 0.08)",
+        panel: "0 22px 60px rgba(16, 32, 51, 0.12)",
+        lift: "0 16px 36px rgba(16, 32, 51, 0.10)",
       },
     },
   },

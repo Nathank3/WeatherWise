@@ -4,7 +4,7 @@
 
 :root {
   color-scheme: light;
-  background: #f7f8fb;
+  background: #f6f9fc;
 }
 
 * {
@@ -16,9 +16,9 @@ body {
   min-height: 100vh;
   color: #111827;
   background:
-    linear-gradient(135deg, rgba(15, 118, 110, 0.12), transparent 32rem),
-    linear-gradient(315deg, rgba(159, 18, 57, 0.08), transparent 28rem),
-    #f7f8fb;
+    linear-gradient(120deg, rgba(29, 155, 240, 0.13) 0 18rem, transparent 18rem 100%),
+    linear-gradient(300deg, rgba(247, 183, 49, 0.16) 0 16rem, transparent 16rem 100%),
+    linear-gradient(180deg, #f9fbff 0%, #f1f7fb 48%, #f8fbf7 100%);
   font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -26,4 +26,22 @@ button,
 input,
 select {
   font: inherit;
+}
+
+.weather-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.13) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.signal-band {
+  background:
+    linear-gradient(90deg, #1d9bf0 0%, #0f9f8f 38%, #f7b731 70%, #be123c 100%);
+}
+
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(18px);
 }
