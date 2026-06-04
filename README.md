@@ -48,6 +48,60 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) and choose a preset location or enter custom coordinates.
 
+## Publishing To GitHub
+
+If the project is already on your local machine but not yet on GitHub, follow these steps:
+
+1. Create a new empty repository on GitHub.
+   - Go to [https://github.com/new](https://github.com/new).
+   - Give it a name, for example `WeatherWise`.
+   - Do not add a README, `.gitignore`, or license on GitHub if this local project already has those files.
+   - Click **Create repository**.
+
+2. Open a terminal in the project folder.
+
+```bash
+cd path/to/weather-wise
+```
+
+3. Initialize Git if the folder is not already a Git repository.
+
+```bash
+git init
+git branch -M main
+```
+
+4. Check that `.env` is ignored before committing.
+
+```bash
+git status
+```
+
+The `.env` file should not appear in the files to be committed. This matters because `.env` contains the private WeatherAI API key.
+
+5. Add and commit the project files.
+
+```bash
+git add .
+git commit -m "Initial WeatherWise project"
+```
+
+6. Connect the local project to the GitHub repository.
+
+Replace `YOUR_USERNAME` and `YOUR_REPOSITORY_NAME` with your real GitHub username and repository name:
+
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git
+```
+
+7. Push the project to GitHub.
+
+```bash
+git push -u origin main
+```
+
+After the push finishes, refresh the GitHub repository page. The project files should now be visible there.
+
 ## Deployment To Vercel
 
 1. Push this repository to GitHub.
