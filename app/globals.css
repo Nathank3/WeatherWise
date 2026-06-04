@@ -29,15 +29,34 @@ select {
 }
 
 .weather-grid {
+  position: relative;
+}
+
+.weather-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.13) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.13) 1px, transparent 1px);
   background-size: 42px 42px;
 }
 
+.weather-grid > * {
+  position: relative;
+  z-index: 1;
+}
+
 .signal-band {
   background:
     linear-gradient(90deg, #1d9bf0 0%, #0f9f8f 38%, #f7b731 70%, #be123c 100%);
+}
+
+.wise-panel {
+  background:
+    linear-gradient(135deg, rgba(16, 32, 51, 0.96), rgba(23, 57, 88, 0.96) 48%, rgba(109, 93, 252, 0.92));
 }
 
 .glass-panel {

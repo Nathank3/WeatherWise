@@ -334,7 +334,7 @@ export default function Home() {
                 </div>
               </article>
 
-              <article className="weather-grid relative overflow-hidden rounded-lg border border-white/20 bg-gradient-to-br from-ink via-[#173958] to-violetline p-5 text-white shadow-panel">
+              <article className="weather-grid wise-panel relative overflow-hidden rounded-lg border border-white/20 p-5 text-white shadow-panel">
                 <div className="absolute inset-x-0 bottom-0 h-1.5 bg-gradient-to-r from-sunbeam via-signal to-skywise" />
                 <div className="flex items-center gap-2 text-sm font-semibold text-cyan-100">
                   <Sparkles className="h-4 w-4" aria-hidden="true" />
