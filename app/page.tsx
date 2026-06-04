@@ -49,6 +49,21 @@ function formatNumber(value: number | undefined, suffix = "") {
   return typeof value === "number" ? `${Math.round(value)}${suffix}` : "Data unavailable";
 }
 
+function formatUsageValue(value: number | undefined) {
+  return typeof value === "number" ? value.toLocaleString() : "Not reported";
+}
+
+function formatResetDate(value: string | undefined) {
+  if (!value) {
+    return "Not reported";
+  }
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? value
+    : new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(date);
+}
+
 function formatDay(value: string | undefined, index: number) {
   if (!value) {
     return index === 0 ? "Today" : `Day ${index + 1}`;
@@ -67,7 +82,7 @@ function metricRow(label: string, value: string, icon: ReactNode) {
     <div className="flex min-h-14 items-center gap-3 rounded-md border border-white/70 bg-white/75 px-3 py-2 shadow-sm">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-skywise to-signal text-white shadow-sm">{icon}</div>
       <div>
-        <p className="text-xs font-bold uppercase tracking-wide text-slate-500">{label}</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-slate-700">{label}</p>
         <p className="text-sm font-semibold text-ink">{value}</p>
       </div>
     </div>
@@ -81,13 +96,13 @@ function ForecastCard({ day, index }: { day: WeatherCondition; index: number }) 
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm font-semibold text-ink">{formatDay(day.date, index)}</p>
-          <p className="mt-1 min-h-10 text-sm text-slate-600">{day.description ?? "Data unavailable"}</p>
+          <p className="mt-1 min-h-10 text-sm font-medium text-slate-700">{day.description ?? "Data unavailable"}</p>
         </div>
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-skywise/10 text-skywise">
           <CloudSun className="h-5 w-5" aria-hidden="true" />
         </div>
       </div>
-      <div className="mt-4 grid gap-2 text-sm text-slate-700">
+      <div className="mt-4 grid gap-2 text-sm font-medium text-slate-800">
         <div className="flex justify-between gap-4">
           <span>High / low</span>
           <strong className="rounded-md bg-cloud px-2 py-1 text-ink">
@@ -220,7 +235,7 @@ export default function Home() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-bold text-ink">Location command</p>
-                <p className="text-sm text-slate-500">Choose a city or enter coordinates.</p>
+                <p className="text-sm font-medium text-slate-700">Choose a city or enter coordinates.</p>
               </div>
               <button
                 type="button"
@@ -281,7 +296,7 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {loading ? (
           <div className="flex min-h-96 items-center justify-center rounded-lg border border-white/70 bg-white/90 shadow-panel">
-            <div className="flex items-center gap-3 text-sm font-semibold text-slate-600">
+            <div className="flex items-center gap-3 text-sm font-semibold text-slate-800">
               <Loader2 className="h-5 w-5 animate-spin text-signal" aria-hidden="true" />
               Loading WeatherAI data
             </div>
@@ -300,12 +315,12 @@ export default function Home() {
                 <div className="signal-band absolute inset-x-0 top-0 h-1.5" />
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+                    <p className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                       <MapPin className="h-4 w-4 text-signal" aria-hidden="true" />
                       {weather.location.name ?? `${weather.location.lat.toFixed(2)}, ${weather.location.lon.toFixed(2)}`}
                     </p>
                     <h2 className="mt-3 text-5xl font-semibold text-ink">{formatNumber(weather.current.temp, "°")}</h2>
-                    <p className="mt-2 text-base text-slate-600">{weather.current.description ?? "Current conditions unavailable"}</p>
+                    <p className="mt-2 text-base font-medium text-slate-800">{weather.current.description ?? "Current conditions unavailable"}</p>
                   </div>
                   <div className="rounded-md border border-signal/20 bg-signal/10 px-3 py-2 text-right text-xs font-bold uppercase tracking-wide text-signal">
                     Current
@@ -335,7 +350,7 @@ export default function Home() {
                 <div>
                   <p className="text-sm font-bold uppercase tracking-wide text-signal">Weather into action</p>
                   <h2 className="mt-1 text-3xl font-black text-ink">Decision Cards</h2>
-                  <p className="mt-1 text-sm text-slate-600">Local rules interpret the latest weather signals into planning guidance.</p>
+                  <p className="mt-1 text-sm font-medium text-slate-700">Local rules interpret the latest weather signals into planning guidance.</p>
                 </div>
               </div>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -363,7 +378,7 @@ export default function Home() {
                         </span>
                       </div>
                       <h3 className="mt-5 text-base font-black text-ink">{decision.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">{decision.rationale}</p>
+                      <p className="mt-2 text-sm font-medium leading-6 text-slate-800">{decision.rationale}</p>
                     </article>
                   );
                 })}
@@ -381,34 +396,42 @@ export default function Home() {
                 {weather.forecast.length ? (
                   weather.forecast.map((day, index) => <ForecastCard key={`${day.date ?? "day"}-${index}`} day={day} index={index} />)
                 ) : (
-                  <div className="rounded-lg border border-white/70 bg-white p-5 text-sm text-slate-600 shadow-sm">Forecast data unavailable.</div>
+                  <div className="rounded-lg border border-white/70 bg-white p-5 text-sm font-medium text-slate-800 shadow-sm">Forecast data unavailable.</div>
                 )}
               </div>
             </section>
 
-            <section className="rounded-lg border border-white/70 bg-white/90 p-5 shadow-sm">
+            <section className="rounded-lg border border-white/70 bg-white p-5 shadow-sm">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h2 className="text-xl font-black text-ink">API Usage</h2>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm font-medium text-slate-800">
                     {usage?.available
-                      ? "WeatherAI quota details from the usage endpoint."
+                      ? "Live WeatherAI quota details from the usage endpoint."
                       : "Usage data unavailable, but weather data is working."}
                   </p>
+                  {usage?.available ? (
+                    <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-700">
+                      Plan {usage.plan ?? "Not reported"} · Resets {formatResetDate(usage.resetAt)}
+                    </p>
+                  ) : null}
                 </div>
                 {usage?.available ? (
                   <div className="grid gap-3 text-sm sm:grid-cols-3">
-                    <div className="rounded-md bg-skywise/10 px-4 py-3">
-                      <p className="text-slate-500">Used</p>
-                      <p className="font-semibold text-ink">{formatNumber(usage.requestsUsed)}</p>
+                    <div className="rounded-md border border-skywise/20 bg-skywise/10 px-4 py-3">
+                      <p className="font-semibold text-slate-800">Used</p>
+                      <p className="text-lg font-black text-ink">{formatUsageValue(usage.requestsUsed)}</p>
+                      <p className="mt-1 text-xs font-medium text-slate-700">AI {formatUsageValue(usage.aiRequestsUsed)}</p>
                     </div>
-                    <div className="rounded-md bg-signal/10 px-4 py-3">
-                      <p className="text-slate-500">Remaining</p>
-                      <p className="font-semibold text-ink">{formatNumber(usage.requestsRemaining)}</p>
+                    <div className="rounded-md border border-signal/20 bg-signal/10 px-4 py-3">
+                      <p className="font-semibold text-slate-800">Remaining</p>
+                      <p className="text-lg font-black text-ink">{formatUsageValue(usage.requestsRemaining)}</p>
+                      <p className="mt-1 text-xs font-medium text-slate-700">AI {formatUsageValue(usage.aiRequestsRemaining)}</p>
                     </div>
-                    <div className="rounded-md bg-sunbeam/20 px-4 py-3">
-                      <p className="text-slate-500">Plan</p>
-                      <p className="font-semibold text-ink">{usage.plan ?? "Data unavailable"}</p>
+                    <div className="rounded-md border border-sunbeam/30 bg-sunbeam/20 px-4 py-3">
+                      <p className="font-semibold text-slate-800">Limit</p>
+                      <p className="text-lg font-black text-ink">{formatUsageValue(usage.requestsLimit)}</p>
+                      <p className="mt-1 text-xs font-medium text-slate-700">AI {formatUsageValue(usage.aiRequestsLimit)}</p>
                     </div>
                   </div>
                 ) : null}
@@ -418,7 +441,7 @@ export default function Home() {
         ) : null}
       </section>
 
-      <footer className="border-t border-mist bg-white/60 px-4 py-6 text-center text-sm text-slate-500">
+      <footer className="border-t border-mist bg-white/80 px-4 py-6 text-center text-sm font-medium text-slate-800">
         WeatherWise demo project for the WeatherAI API integration challenge.
       </footer>
     </main>

@@ -29,6 +29,10 @@ export type NormalizedWeather = {
 export type NormalizedUsage = {
   requestsUsed?: number;
   requestsRemaining?: number;
+  requestsLimit?: number;
+  aiRequestsUsed?: number;
+  aiRequestsRemaining?: number;
+  aiRequestsLimit?: number;
   plan?: string;
   resetAt?: string;
   available: boolean;
@@ -197,12 +201,31 @@ export function normalizeUsageResponse(input: unknown): NormalizedUsage {
   }
 
   const data = pickRecord(input, ["data", "usage", "quota", "result"]) ?? input;
+  const period = pickRecord(data, ["period", "billingPeriod", "window"]);
+  const limits = pickRecord(data, ["limits", "limit", "quota"]);
+  const remaining = pickRecord(data, ["remaining", "remainingQuota"]);
 
   return {
-    requestsUsed: pickNumber(data, ["requests_used", "requestsUsed", "used", "count", "total_requests"]),
-    requestsRemaining: pickNumber(data, ["requests_remaining", "requestsRemaining", "remaining", "remaining_requests"]),
+    requestsUsed:
+      pickNumber(data, ["requests_used", "requestsUsed", "used", "count", "total_requests"]) ??
+      (period ? pickNumber(period, ["requestCount", "requests", "requests_used", "used"]) : undefined),
+    requestsRemaining:
+      pickNumber(data, ["requests_remaining", "requestsRemaining", "remaining", "remaining_requests"]) ??
+      (remaining ? pickNumber(remaining, ["requests", "requestCount", "requestsRemaining"]) : undefined),
+    requestsLimit:
+      pickNumber(data, ["requests_limit", "requestsLimit", "limit", "requestLimit"]) ??
+      (limits ? pickNumber(limits, ["requests", "requestLimit", "requestsLimit"]) : undefined),
+    aiRequestsUsed:
+      pickNumber(data, ["ai_requests_used", "aiRequestsUsed", "ai_used"]) ??
+      (period ? pickNumber(period, ["aiRequestCount", "aiRequests", "ai_requests_used"]) : undefined),
+    aiRequestsRemaining:
+      pickNumber(data, ["ai_requests_remaining", "aiRequestsRemaining", "ai_remaining"]) ??
+      (remaining ? pickNumber(remaining, ["aiRequests", "aiRequestCount", "aiRequestsRemaining"]) : undefined),
+    aiRequestsLimit:
+      pickNumber(data, ["ai_requests_limit", "aiRequestsLimit", "aiLimit"]) ??
+      (limits ? pickNumber(limits, ["aiRequests", "aiRequestLimit", "aiRequestsLimit"]) : undefined),
     plan: pickString(data, ["plan", "tier", "subscription"]),
-    resetAt: pickString(data, ["reset_at", "resetAt", "period_end", "periodEnd"]),
+    resetAt: pickString(data, ["reset_at", "resetAt", "period_end", "periodEnd"]) ?? (period ? pickString(period, ["end", "resetAt"]) : undefined),
     available: true,
   };
 }
